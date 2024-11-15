@@ -1,0 +1,24 @@
+version: '3'
+services:
+  legoinventorycheck:
+    image: legoinventorycheck
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8080 
+      - ASPNETCORE_ENVIRONMENT=Development
+    deploy:
+      replicas: 2
+    networks:
+      - loadbalancingnet
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - "3000:80"
+    networks:
+      - loadbalancingnet
+    depends_on:
+      - legoinventorycheck
+
+networks:
+  loadbalancingnet:
